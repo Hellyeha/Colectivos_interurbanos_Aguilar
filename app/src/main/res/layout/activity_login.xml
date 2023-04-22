@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/background_yellow_002"
     tools:context=".activities.LoginActivity">
 
     <include layout="@layout/action_bar_toolbar"></include>
@@ -13,16 +14,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="230dp"
         >
-
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@drawable/logo"
-            android:layout_marginTop="80dp"
-            android:layout_gravity="center">
-
-        </ImageView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -105,7 +98,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Acceder"
-                android:layout_margin="40dp">
+                android:layout_margin="40dp"
+                app:cornerRadius="20dp"
+                android:backgroundTint="@color/purple_500">
             </Button>
 
         </LinearLayout>

@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/background_yellow_003"
     tools:context=".activities.driver.RegisterDriverActivity">
 
     <include layout="@layout/action_bar_toolbar"></include>
@@ -14,16 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="100dp"
         >
 
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/logo"
-            android:layout_marginTop="70dp"
-            android:layout_gravity="center">
-
-        </ImageView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -197,8 +191,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Registrar"
-                android:layout_margin="40dp">
-            </Button>
+                android:layout_margin="40dp"
+                app:cornerRadius="20dp"
+                android:backgroundTint="@color/purple_500">
+        </Button>
 
         </LinearLayout>
 

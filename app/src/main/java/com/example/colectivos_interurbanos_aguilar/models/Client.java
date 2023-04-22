@@ -12,6 +12,7 @@ public class Client {
         this.email = email;
     }
 
+
     public String getId() {
         return id;
     }

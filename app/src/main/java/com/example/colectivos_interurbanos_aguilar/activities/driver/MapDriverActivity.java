@@ -26,10 +26,10 @@ import android.widget.Toast;
 
 import com.example.colectivos_interurbanos_aguilar.R;
 import com.example.colectivos_interurbanos_aguilar.activities.MainActivity;
-import com.example.colectivos_interurbanos_aguilar.activities.client.MapClientActivity;
 import com.example.colectivos_interurbanos_aguilar.includes.MyToolbar;
 import com.example.colectivos_interurbanos_aguilar.providers.AuthProvider;
 import com.example.colectivos_interurbanos_aguilar.providers.GeofireProvider;
+import com.example.colectivos_interurbanos_aguilar.providers.TokenProvider;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -45,7 +45,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 public class MapDriverActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -64,6 +66,8 @@ public class MapDriverActivity extends AppCompatActivity implements OnMapReadyCa
     private Button mButtonConnect;
     private boolean mIsConnect = false;
     private LatLng mCurrentLatLng;
+    private TokenProvider mTokenProvider;
+    private ValueEventListener mListener;
 
     LocationCallback mLocationCallback = new LocationCallback() {
         @Override
@@ -108,12 +112,14 @@ public class MapDriverActivity extends AppCompatActivity implements OnMapReadyCa
 
         mAuthProvider = new AuthProvider();
 
-        mGeofireProvider = new GeofireProvider();
+        mGeofireProvider = new GeofireProvider("active_drivers");
 
         mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
 
         mMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
+
+        mTokenProvider = new TokenProvider();
 
         mButtonConnect = findViewById(R.id.btnConnect);
         mButtonConnect.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +131,37 @@ public class MapDriverActivity extends AppCompatActivity implements OnMapReadyCa
                 else {
                     startLocation();
                 }
+            }
+        });
+
+
+        generateToken();
+
+        isDriverWorking();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mListener != null){
+            mGeofireProvider.isDriverWorking(mAuthProvider.getId()).removeEventListener(mListener);
+        }
+    }
+
+    private void isDriverWorking() {
+
+        mListener = mGeofireProvider.isDriverWorking(mAuthProvider.getId()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    disconnect();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 
@@ -144,6 +181,7 @@ public class MapDriverActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
+
     private void updateLocation() {
         if (mAuthProvider.existSession() && mCurrentLatLng != null) {
             mGeofireProvider.saveLocation(mAuthProvider.getId(), mCurrentLatLng);
@@ -161,6 +199,7 @@ public class MapDriverActivity extends AppCompatActivity implements OnMapReadyCa
                 .setMinUpdateIntervalMillis(2000)
                 .setMaxUpdateDelayMillis(100)
                 .build();
+
     }
 
 
@@ -174,12 +213,12 @@ public class MapDriverActivity extends AppCompatActivity implements OnMapReadyCa
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
                     if (gpsActived()) {
-                       mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-                       // mMap.setMyLocationEnabled(true);
-                   }
-                   else {
-                       showAlertDialogNOGPS();
-                   }
+                        mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+                        mMap.setMyLocationEnabled(true);
+                    }
+                    else {
+                        showAlertDialogNOGPS();
+                    }
                 } else {
                     checkLocationPermissions();
                 }
@@ -207,7 +246,7 @@ public class MapDriverActivity extends AppCompatActivity implements OnMapReadyCa
                 return;
             }
             mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-            //mMap.setMyLocationEnabled(true);
+            mMap.setMyLocationEnabled(true);
         }
         else {
             showAlertDialogNOGPS();
@@ -237,7 +276,6 @@ public class MapDriverActivity extends AppCompatActivity implements OnMapReadyCa
         return isActive;
     }
 
-
     private void startLocation() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -247,7 +285,7 @@ public class MapDriverActivity extends AppCompatActivity implements OnMapReadyCa
                     mIsConnect = true;
 
                     mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
-                   // mMap.setMyLocationEnabled(true);
+                    mMap.setMyLocationEnabled(true);
                 }
                 else {
                     showAlertDialogNOGPS();
@@ -259,8 +297,9 @@ public class MapDriverActivity extends AppCompatActivity implements OnMapReadyCa
         }
         else {
             if (gpsActived()) {
-
                 mFusedLocation.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+                mMap.setMyLocationEnabled(true);
+
             }
             else {
                 showAlertDialogNOGPS();
@@ -313,6 +352,10 @@ public class MapDriverActivity extends AppCompatActivity implements OnMapReadyCa
         Intent intent = new Intent(MapDriverActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    void generateToken(){
+        mTokenProvider.create(mAuthProvider.getId());
     }
 
 }

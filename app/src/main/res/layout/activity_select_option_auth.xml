@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/wavy_final_002"
     tools:context=".activities.SelectOptionAuthActivity">
 
     <include layout="@layout/action_bar_toolbar"></include>
@@ -30,7 +31,8 @@
             android:layout_marginTop="45dp"
             android:layout_marginLeft="90dp"
             android:layout_marginRight="90dp"
-            android:text="Ingresar">
+            android:text="Ingresar"
+            app:cornerRadius="20dp">
         </Button>
         <Button
             android:id="@+id/btnGoToRegister"
@@ -39,7 +41,9 @@
             android:layout_marginTop="5dp"
             android:layout_marginLeft="90dp"
             android:layout_marginRight="90dp"
-            android:text="Registrarse">
+            android:text="Registrarse"
+            android:backgroundTint="@color/Blue_Light"
+            app:cornerRadius="20dp">
         </Button>
 
     </LinearLayout>

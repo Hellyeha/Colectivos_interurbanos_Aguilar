@@ -15,5 +15,68 @@
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment">
     </fragment>
+    
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/white"
+            app:cardCornerRadius="20dp"
+            >
+
+            <fragment
+                android:id="@+id/placeAutocompleteOrigin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment">
+            </fragment>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/white"
+            app:cardCornerRadius="20dp">
+
+            <fragment
+                android:id="@+id/placeAutocompleteDestination"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment">
+            </fragment>
+
+        </androidx.cardview.widget.CardView>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/mylocation_icon"
+        android:layout_gravity="center">
+    </ImageView>
+    
+    <Button
+        android:id="@+id/btnRequestDriver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Solicitar Viaje"
+        android:layout_gravity="bottom"
+        app:cornerRadius="20dp"
+        android:layout_margin="20dp">
+    </Button>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

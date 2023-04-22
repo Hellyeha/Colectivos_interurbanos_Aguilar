@@ -1,9 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".activities.client.RequestDriverActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation"
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            app:lottie_imageAssetsFolder="assets"
+            app:lottie_fileName="blue-car.json"
+            android:layout_gravity="center"
+            app:lottie_loop="true"
+            android:scaleType="centerCrop"
+            app:lottie_autoPlay="true"
+            android:layout_margin="30dp">
+        </com.airbnb.lottie.LottieAnimationView>
+
+        
+        <TextView
+            android:id="@+id/textViewLookingFor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Buscando Conductor..."
+            android:textSize="18sp">
+        </TextView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="bottom">
+
+            <Button
+                android:id="@+id/btnCancelRequest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancelar Viaje"
+                android:textColor="@color/white"
+                android:layout_margin="30dp"
+                android:background="@drawable/rounded_button">
+            </Button>
+
+        </LinearLayout>
+        
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
